@@ -1,8 +1,10 @@
 # miniflux-discord
 
-This is a small wrapper program between [Miniflux](https://miniflux.app) and [Discord](https://discord.com/).
+This is a small "proxy" program between [Miniflux](https://miniflux.app) and [Discord](https://discord.com/).
 
 Miniflux already supports Discord as an integration, however the "rich" embeds it provides are kinda crap, and there's no way to customize them. So instead, this program acts as a proxy between.
+
+The format this outputs is `__**$TITLE**__\n$URL`, this way Discord can embed links itself.
 
 ## Setup
 
