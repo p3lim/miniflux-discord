@@ -7,4 +7,4 @@ ENV LISTEN_ADDR 0.0.0.0
 
 EXPOSE 8080/tcp
 
-CMD ["miniflux-discord"]
+CMD ["/miniflux-discord"]
