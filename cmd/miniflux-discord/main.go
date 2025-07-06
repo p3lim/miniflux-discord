@@ -16,23 +16,21 @@ var (
 )
 
 func parseEnv() error {
-	envPort := os.Getenv("LISTEN_PORT")
-	if envPort == "" {
-		LISTEN_PORT = 8080
-	} else {
+	if envPort := os.Getenv("LISTEN_PORT"); envPort != "" {
 		var err error
 		LISTEN_PORT, err = strconv.Atoi(envPort)
 		if err != nil {
 			return err
 		}
+	} else {
+		LISTEN_PORT = 8080
 	}
 
-	envAddr := os.Getenv("LISTEN_ADDR")
-	if envAddr == "" {
-		LISTEN_ADDR = "0.0.0.0"
-	} else {
+	if envAddr := os.Getenv("LISTEN_ADDR"); envAddr != "" {
 		// TODO: validate
 		LISTEN_ADDR = envAddr
+	} else {
+		LISTEN_ADDR = "0.0.0.0"
 	}
 
 	if discordFile := os.Getenv("DISCORD_WEBHOOK_URL_FILE"); discordFile != "" {
