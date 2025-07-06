@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -34,7 +35,17 @@ func parseEnv() error {
 		LISTEN_ADDR = envAddr
 	}
 
-	DISCORD_WEBHOOK_URL = os.Getenv("DISCORD_WEBHOOK_URL")
+	if discordFile := os.Getenv("DISCORD_WEBHOOK_URL_FILE"); discordFile != "" {
+		fileData, err := os.ReadFile(discordFile)
+		if err != nil {
+			return err
+		}
+
+		DISCORD_WEBHOOK_URL = strings.TrimSpace(string(fileData))
+	} else {
+		DISCORD_WEBHOOK_URL = os.Getenv("DISCORD_WEBHOOK_URL")
+	}
+
 	if DISCORD_WEBHOOK_URL == "" {
 		return fmt.Errorf("missing DISCORD_WEBHOOK_URL")
 	}

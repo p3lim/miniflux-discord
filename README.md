@@ -11,6 +11,7 @@ Miniflux already supports Discord as an integration, however the "rich" embeds i
 	- `LISTEN_PORT` - defaults to `8080`
 	- `LISTEN_ADDR` - defaults to `0.0.0.0`
 	- `DISCORD_WEBHOOK_URL` - required
+		- alternatively `DISCORD_WEBHOOK_URL_FILE` to better work with secrets
 	- `LOG_LEVEL` - defaults to `INFO`
 3. Use this as a Webhook integration (Settings > Integrations > Webhook)
 	- e.g. `http://localhost:8080/`
