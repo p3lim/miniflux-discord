@@ -1,0 +1,54 @@
+builds:
+  - main: ./cmd/miniflux-discord
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    env:
+      - CGO_ENABLED=0
+
+dockers:
+  - goos: linux
+    goarch: amd64
+    dockerfile: Containerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/amd64
+    image_templates:
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-amd64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-amd64
+
+  - goos: linux
+    goarch: arm64
+    dockerfile: Containerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/arm64
+    image_templates:
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-arm64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-arm64
+
+  - goos: linux
+    goarch: arm
+    dockerfile: Containerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/arm
+    image_templates:
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-arm32
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-arm32
+
+docker_manifests:
+  - name_template: ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}
+    image_templates:
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-amd64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-arm64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Tag }}-arm32
+
+  - name_template: ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest
+    image_templates:
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-amd64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-arm64
+      - ghcr.io/{{ .Env.REPOSITORY_OWNER }}/{{ .ProjectName }}:latest-arm32
