@@ -23,7 +23,6 @@ func send(msg DiscordMessage) error {
 		return err
 	}
 
-	slog.Info("sending message")
 	slog.Debug("message details", "message", msg)
 	req, err := http.NewRequest("POST", DISCORD_WEBHOOK_URL, bytes.NewBuffer(data))
 	if err != nil {
