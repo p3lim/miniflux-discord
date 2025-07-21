@@ -48,3 +48,5 @@ type WebhookNewEntriesEvent struct {
 	Feed      *WebhookFeed    `json:"feed"`
 	Entries   []*WebhookEntry `json:"entries"`
 }
+
+const NewEntriesEventType = "new_entries"

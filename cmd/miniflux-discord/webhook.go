@@ -7,8 +7,6 @@ import (
 	"net/http"
 )
 
-const NewEntriesEventType = "new_entries"
-
 func serve(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
