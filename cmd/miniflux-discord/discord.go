@@ -7,6 +7,9 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"time"
+
+	"github.com/avast/retry-go/v4"
 )
 
 type DiscordMessage struct {
@@ -29,25 +32,29 @@ func send(msg DiscordMessage) error {
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		return err
-	}
 
-	defer res.Body.Close()
-
-	if res.StatusCode > 399 {
-		body, err := io.ReadAll(res.Body)
+	// retry logic
+	return retry.Do(func() error {
+		res, err := client.Do(req)
 		if err != nil {
 			return err
 		}
 
-		slog.Debug("discord response", "body", string(body))
+		defer res.Body.Close()
 
-		return fmt.Errorf("unexpected message response: %d - %s", res.StatusCode, res.Status)
-	} else {
-		slog.Info("message sent", "status", res.Status, "code", res.StatusCode)
-	}
+		if res.StatusCode > 399 {
+			body, err := io.ReadAll(res.Body)
+			if err != nil {
+				return err
+			}
 
-	return nil
+			slog.Debug("discord response", "body", string(body))
+
+			return fmt.Errorf("unexpected message response: %d - %s", res.StatusCode, res.Status)
+		} else {
+			slog.Info("message sent", "status", res.Status, "code", res.StatusCode)
+		}
+
+		return nil
+	}, retry.UntilSucceeded(), retry.Delay(10*time.Second))
 }
